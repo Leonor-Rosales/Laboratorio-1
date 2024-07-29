@@ -1,21 +1,27 @@
 ﻿using System.Collections;
+using static System.Net.Mime.MediaTypeNames;
 
 
-static void IngresarProductos(List<double> productList, List<String> nameList)
+static int IngresarProductos( List<String> nameList, List<double> productList)
 {
+    int cont = 0;
     try
     {
+        
         Console.Write("Ingrese el nombre del producto: ");
         string nameProducts = Console.ReadLine();
         nameList.Add(nameProducts);
         Console.Write("Ingrese el precio del producto: ");
-        double ProductList = int.Parse(Console.ReadLine());
+        double priceProducts = int.Parse(Console.ReadLine());
+        productList.Add(priceProducts);
     }
     catch (Exception ex)
     {
 
         Console.WriteLine("Error:" + ex.Message);
     }
+    cont++;
+ return cont;
 }
 static double CalcularPrecios(List<double> productList)
 {
@@ -23,10 +29,10 @@ static double CalcularPrecios(List<double> productList)
     foreach (double product in productList)
     {
         preciosAcumulados = product;
-        preciosAcumulados+= preciosAcumulados;
+        preciosAcumulados++;
     }
 
-    return preciosAcumulados;
+    return preciosAcumulados-1;
 }
 static double CalcularTotal(List<double> productList)
 {
@@ -36,46 +42,61 @@ static double CalcularTotal(List<double> productList)
         Console.WriteLine("Se le aplicará un 10% de descuento");
      total = subTotal - (subTotal*0.1);
     }
+    else
+    {
+        total = subTotal;
+    }
     return total;
 }
  
 static void Menu()
 {
+    Console.Clear();
     Console.WriteLine("--- Tienda Detroy ---");
     Console.WriteLine("1. Ingresar Productos");
     Console.WriteLine("2. Total a Pagar");
     Console.WriteLine("3. Salir");
-    Console.WriteLine("Ingrese la opción deseada");
+    Console.Write("Ingrese la opción deseada: ");
   
 }
-try
+List<double> ProductList = new List<double>();
+List<string> NameList = new List<string>();
+bool run = true;
+do
 {
-    List<double> ProductList = new List<double>();
-    List<string> NameList = new List<string>();
-    Menu();
-    int option = int.Parse(Console.ReadLine());
-    switch (option)
+    try
     {
-        case 1:
-            Console.Clear();
-            IngresarProductos(NameList, ProductList);
-            break;
-        case 2:
-            Console.Clear();
-            CalcularTotal(ProductList);
-            break;
-        case 3:
-            Console.Clear();
-            Console.WriteLine("Saliendo");
-            return;
-
-        default:
-            Console.WriteLine("Ingrese una opón válida")
+       
+           Menu();
+        int option = int.Parse(Console.ReadLine());
+        switch (option)
+        {
+            case 1:
+                Console.Clear();
+                IngresarProductos(NameList, ProductList);
+       
                 break;
-    }
-}
-catch (Exception ex)
-{
+            case 2:
+                Console.Clear();
+                Console.WriteLine("Su total a pagar es: " + CalcularTotal(ProductList));
+                Console.WriteLine("El total de productos es de: " + NameList.Count);
+                Console.ReadKey();
+                break;
+            case 3:
+                Console.Clear();
+                Console.WriteLine("Saliendo");
+                Console.ReadKey();
+                run = false;
+                break;
 
-    Console.WriteLine("Error: " + ex.Message);
-}
+            default:
+                Console.WriteLine("Ingrese una opón válida");
+                break;
+        }
+    }
+    catch (Exception ex)
+    {
+
+        Console.WriteLine("Error: " + ex.Message);
+    } 
+} while (run = true);
