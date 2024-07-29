@@ -14,6 +14,7 @@ static int IngresarProductos( List<String> nameList, List<double> productList)
         Console.Write("Ingrese el precio del producto: ");
         double priceProducts = int.Parse(Console.ReadLine());
         productList.Add(priceProducts);
+        
     }
     catch (Exception ex)
     {
