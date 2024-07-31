@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,7 @@ namespace Proyecto_2_POO
 
         public void Menu()
         {
+            Console.Clear();
             Console.WriteLine("--- Menú Principal");
             Console.WriteLine("1. Ingresar Productos");
             Console.WriteLine("2. Consultar Información");
@@ -43,19 +45,35 @@ namespace Proyecto_2_POO
                 string nameProducts = Console.ReadLine();
                 Console.Write("Ingrese el precio del producto: ");
                 double priceProducts = int.Parse(Console.ReadLine());
-                Console.Write("Ingrese la cantidad del producto: ");
-                int stockProducts = int.Parse(Console.ReadLine());
-                Producto productFind = productList.Find(p => p.Nombre == nameProducts);
-                if (productFind == null)
+                if  (priceProducts > 0)
                 {
-                    productList.Add(new Producto(nameProducts, priceProducts, stockProducts));
-                    Console.WriteLine("\nProducto Añadido Correctamente");
-                    Console.ReadKey();
+                    Console.Write("Ingrese la cantidad del producto: ");
+                    int stockProducts = int.Parse(Console.ReadLine());
+                    if (stockProducts > 0)
+                    {
+                        Producto productFind = productList.Find(p => p.Nombre == nameProducts);
+                        if (productFind == null)
+                        {
+                            productList.Add(new Producto(nameProducts, priceProducts, stockProducts));
+                            Console.WriteLine("\nProducto Añadido Correctamente");
+                            Console.ReadKey();
+                        }
+                        else
+                        {
+                            Console.WriteLine("\n[!] Producto Existente");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("[!] Error: Ingrese un valor mayor a 0");
+                    }
+                    
                 }
                 else
                 {
-                    Console.WriteLine("\nProducto Existente");
+                    Console.WriteLine("[!] Error: Ingrese un valor mayor a 0");
                 }
+                
             }
             catch (Exception ex)
             {
@@ -65,16 +83,18 @@ namespace Proyecto_2_POO
         }
         public void ConsultarInfo(List<Producto> productList)
         {
+            Console.Write("Ingrese el nombre del producto: ");
             string nameProducts = Console.ReadLine();
             Producto productFind = productList.Find(p => p.Nombre == nameProducts);
             if (productFind != null)
             {
-                MostrarProducto(productList);
+                Console.WriteLine($"Nombre: {productFind.Nombre}\nPrecio: {productFind.Precio}\nCantidad: {productFind.Stock}");
+                Console.WriteLine("");
                 Console.ReadKey();
             }
             else
             {
-                Console.WriteLine("\nProducto Inexistente");
+                Console.WriteLine("\n[!] Producto Inexistente");
             }
         }
         public void VentaProducto(List<Producto> productList)
@@ -84,33 +104,63 @@ namespace Proyecto_2_POO
             Producto productFind = productList.Find(p => p.Nombre == nameProducts);
             if (productFind != null)
             {
-                Console.Write("Cantidad: ");
                 int stock = int.Parse(Console.ReadLine());
-                productFind.Stock -= stock;
-                Console.WriteLine("\nProducto Añadido Correctamente");
-                Console.ReadKey();
+                Console.Write("Cantidad: ");
+                if (stock <= 0)
+                {
+                    Console.WriteLine("[!] Error: Ingrese un valor mayor a 0");
+                }
+                else
+                {
+                    if (productFind.Stock > 0)
+                    {
+                        productFind.Stock -= stock;
+                        Console.WriteLine("\nProducto Vendido Correctamente");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        Console.WriteLine("\n[!] Producto Agotado");
+                    }
+                }
             }
             else
             {
-                Console.WriteLine("\nProducto Inexistente");
+                Console.WriteLine("\n[!] Producto Inexistente");
             }
         }
+
         public void ReabastecerStock(List<Producto> productList)
         {
-            Console.Write("Ingrese el nombre del producto: ");
-            string nameProducts = Console.ReadLine();
-            Producto productFind = productList.Find(p => p.Nombre == nameProducts);
-            if (productFind != null)
+            try
             {
-                Console.Write("Cantidad a Ingresar: ");
-                int stock = int.Parse(Console.ReadLine());
-                productFind.Stock += stock;
-                Console.WriteLine("\nStock Del Producto Actualizado Correctamente");
-                Console.ReadKey();
+                Console.Write("Ingrese el nombre del producto: ");
+                string nameProducts = Console.ReadLine();
+                Producto productFind = productList.Find(p => p.Nombre == nameProducts);
+                if (productFind != null)
+                {
+                    Console.Write("Cantidad a Ingresar: ");
+                    int stock = int.Parse(Console.ReadLine());
+                    if (stock <= 0)
+                    {
+                        Console.WriteLine("[!] Error: Ingrese un valor mayor a 0");
+                    }
+                    else
+                    {
+                        productFind.Stock += stock;
+                        Console.WriteLine("\nStock Del Producto Actualizado Correctamente");
+                        Console.ReadKey();
+                    }                
+                }
+                else
+                {
+                    Console.WriteLine("\n[!] Producto Inexistente");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("\nProducto Inexistente");
+
+                Console.WriteLine("[!] Error: " + ex.Message);
             }
         }
         public void ActualizarPrecio(List<Producto> productList)
@@ -122,23 +172,24 @@ namespace Proyecto_2_POO
             {
                 Console.Write("Precio a Ingresar: ");
                 int price = int.Parse(Console.ReadLine());
-                productFind.Precio = price;
-                Console.WriteLine("\nPrecio Del Producto Actualizado Correctamente");
-                Console.ReadKey();
+                if (price <= 0)
+                {
+                    Console.WriteLine("[!] Error: Ingrese un valor mayor a 0");
+                }
+                else
+                {
+                    productFind.Precio = price;
+                    Console.WriteLine("\nPrecio Del Producto Actualizado Correctamente");
+                    Console.ReadKey();
+                }
             }
             else
             {
-                Console.WriteLine("\nProducto Inexistente");
+                Console.WriteLine("\n[!] Producto Inexistente");
             }
         }
-        public void MostrarProducto(List<Producto> productList)
-        { 
-               foreach (Producto product in productList) 
-            {
-                Console.WriteLine($"Nombre: {product.Nombre}");
-            }
-        }
-    }
 
     }
-    
+
+}
+

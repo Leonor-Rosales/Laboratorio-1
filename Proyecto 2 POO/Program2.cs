@@ -27,13 +27,28 @@ do
                 break;
             case 3:
                 Console.Clear();
-                Console.WriteLine("Saliendo");
+                productoObjeto.VentaProducto(ProductList);
+                Console.ReadKey();
+                break;
+            case 4:
+                Console.Clear();
+                productoObjeto.ReabastecerStock(ProductList);
+                Console.ReadKey();
+                break;
+            case 5:
+                Console.Clear();
+                productoObjeto.ActualizarPrecio(ProductList);
+                Console.ReadKey();
+                break;
+            case 6:
+                Console.Clear();
+                Console.WriteLine("Saliendo...");
                 Console.ReadKey();
                 run = false;
                 break;
 
             default:
-                Console.WriteLine("Ingrese una opón válida");
+                Console.WriteLine("Ingrese una opción válida");
                 break;
         }
     }
@@ -42,4 +57,4 @@ do
 
         Console.WriteLine("Error: " + ex.Message);
     }
-} while (run = true)
+} while (run == true);
